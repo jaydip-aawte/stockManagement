@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.9
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 02, 2023 at 04:09 PM
--- Server version: 10.1.31-MariaDB
--- PHP Version: 7.3.27
+-- Generation Time: Oct 04, 2023 at 08:46 PM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ration`
+-- Database: `supermarketmanagement`
 --
 
 -- --------------------------------------------------------
@@ -35,14 +34,14 @@ CREATE TABLE `back_order_list` (
   `bo_code` varchar(50) NOT NULL,
   `supplier_id` int(30) NOT NULL,
   `amount` float NOT NULL,
-  `discount_perc` float NOT NULL DEFAULT '0',
-  `discount` float NOT NULL DEFAULT '0',
-  `tax_perc` float NOT NULL DEFAULT '0',
-  `tax` float NOT NULL DEFAULT '0',
-  `remarks` text,
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 = pending, 1 = partially received, 2 =received',
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `discount_perc` float NOT NULL DEFAULT 0,
+  `discount` float NOT NULL DEFAULT 0,
+  `tax_perc` float NOT NULL DEFAULT 0,
+  `tax` float NOT NULL DEFAULT 0,
+  `remarks` text DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '0 = pending, 1 = partially received, 2 =received',
+  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
+  `date_updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -65,9 +64,9 @@ CREATE TABLE `bo_items` (
   `bo_id` int(30) NOT NULL,
   `item_id` int(30) NOT NULL,
   `quantity` int(30) NOT NULL,
-  `price` float NOT NULL DEFAULT '0',
+  `price` float NOT NULL DEFAULT 0,
   `unit` varchar(50) NOT NULL,
-  `total` float NOT NULL DEFAULT '0'
+  `total` float NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -92,10 +91,10 @@ CREATE TABLE `item_list` (
   `name` text NOT NULL,
   `description` text NOT NULL,
   `supplier_id` int(30) NOT NULL,
-  `cost` float NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `cost` float NOT NULL DEFAULT 0,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
+  `date_updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -118,9 +117,9 @@ CREATE TABLE `po_items` (
   `po_id` int(30) NOT NULL,
   `item_id` int(30) NOT NULL,
   `quantity` int(30) NOT NULL,
-  `price` float NOT NULL DEFAULT '0',
+  `price` float NOT NULL DEFAULT 0,
   `unit` varchar(50) NOT NULL,
-  `total` float NOT NULL DEFAULT '0'
+  `total` float NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -143,14 +142,14 @@ CREATE TABLE `purchase_order_list` (
   `po_code` varchar(50) NOT NULL,
   `supplier_id` int(30) NOT NULL,
   `amount` float NOT NULL,
-  `discount_perc` float NOT NULL DEFAULT '0',
-  `discount` float NOT NULL DEFAULT '0',
-  `tax_perc` float NOT NULL DEFAULT '0',
-  `tax` float NOT NULL DEFAULT '0',
+  `discount_perc` float NOT NULL DEFAULT 0,
+  `discount` float NOT NULL DEFAULT 0,
+  `tax_perc` float NOT NULL DEFAULT 0,
+  `tax` float NOT NULL DEFAULT 0,
   `remarks` text NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 = pending, 1 = partially received, 2 =received',
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '0 = pending, 1 = partially received, 2 =received',
+  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
+  `date_updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -169,16 +168,16 @@ INSERT INTO `purchase_order_list` (`id`, `po_code`, `supplier_id`, `amount`, `di
 CREATE TABLE `receiving_list` (
   `id` int(30) NOT NULL,
   `form_id` int(30) NOT NULL,
-  `from_order` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1=PO ,2 = BO',
-  `amount` float NOT NULL DEFAULT '0',
-  `discount_perc` float NOT NULL DEFAULT '0',
-  `discount` float NOT NULL DEFAULT '0',
-  `tax_perc` float NOT NULL DEFAULT '0',
-  `tax` float NOT NULL DEFAULT '0',
-  `stock_ids` text,
-  `remarks` text,
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `from_order` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1=PO ,2 = BO',
+  `amount` float NOT NULL DEFAULT 0,
+  `discount_perc` float NOT NULL DEFAULT 0,
+  `discount` float NOT NULL DEFAULT 0,
+  `tax_perc` float NOT NULL DEFAULT 0,
+  `tax` float NOT NULL DEFAULT 0,
+  `stock_ids` text DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
+  `date_updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -200,11 +199,11 @@ CREATE TABLE `return_list` (
   `id` int(30) NOT NULL,
   `return_code` varchar(50) NOT NULL,
   `supplier_id` int(30) NOT NULL,
-  `amount` float NOT NULL DEFAULT '0',
-  `remarks` text,
+  `amount` float NOT NULL DEFAULT 0,
+  `remarks` text DEFAULT NULL,
   `stock_ids` text NOT NULL,
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
+  `date_updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -216,12 +215,12 @@ CREATE TABLE `return_list` (
 CREATE TABLE `sales_list` (
   `id` int(30) NOT NULL,
   `sales_code` varchar(50) NOT NULL,
-  `client` text,
-  `amount` float NOT NULL DEFAULT '0',
-  `remarks` text,
+  `client` text DEFAULT NULL,
+  `amount` float NOT NULL DEFAULT 0,
+  `remarks` text DEFAULT NULL,
   `stock_ids` text NOT NULL,
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
+  `date_updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -238,27 +237,28 @@ INSERT INTO `sales_list` (`id`, `sales_code`, `client`, `amount`, `remarks`, `st
 --
 
 CREATE TABLE `stock_list` (
+  `stockId` int(11) NOT NULL,
   `id` int(30) NOT NULL,
   `item_id` int(30) NOT NULL,
   `quantity` int(30) NOT NULL,
   `unit` varchar(250) DEFAULT NULL,
-  `price` float NOT NULL DEFAULT '0',
+  `price` float NOT NULL DEFAULT 0,
   `total` float NOT NULL,
-  `type` tinyint(1) NOT NULL DEFAULT '1',
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `type` tinyint(1) NOT NULL DEFAULT 1,
+  `date_created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `stock_list`
 --
 
-INSERT INTO `stock_list` (`id`, `item_id`, `quantity`, `unit`, `price`, `total`, `type`, `date_created`) VALUES
-(1, 1, 250, 'pcs', 150, 37500, 1, '2021-11-03 11:20:38'),
-(2, 1, 125, 'pcs', 150, 18750, 1, '2021-11-03 11:20:51'),
-(3, 1, 125, 'pcs', 150, 18750, 1, '2021-11-03 11:21:00'),
-(0, 3, 1, 'liter', 140, 140, 2, '2023-02-02 20:23:58'),
-(0, 4, 12, 'kilo', 4, 48, 2, '2023-02-02 20:23:58'),
-(0, 1, 8, 'kilo', 5, 40, 2, '2023-02-02 20:23:58');
+INSERT INTO `stock_list` (`stockId`, `id`, `item_id`, `quantity`, `unit`, `price`, `total`, `type`, `date_created`) VALUES
+(1, 1, 1, 250, 'pcs', 150, 37500, 1, '2021-11-03 11:20:38'),
+(2, 2, 1, 125, 'pcs', 150, 18750, 1, '2021-11-03 11:20:51'),
+(3, 3, 1, 125, 'pcs', 150, 18750, 1, '2021-11-03 11:21:00'),
+(4, 0, 3, 1, 'liter', 140, 140, 2, '2023-02-02 20:23:58'),
+(5, 0, 4, 12, 'kilo', 4, 48, 2, '2023-02-02 20:23:58'),
+(6, 0, 1, 8, 'kilo', 5, 40, 2, '2023-02-02 20:23:58');
 
 -- --------------------------------------------------------
 
@@ -272,9 +272,9 @@ CREATE TABLE `supplier_list` (
   `address` text NOT NULL,
   `cperson` text NOT NULL,
   `contact` text NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
+  `date_updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -302,8 +302,8 @@ CREATE TABLE `system_info` (
 --
 
 INSERT INTO `system_info` (`id`, `meta_field`, `meta_value`) VALUES
-(1, 'name', 'Ration-Stock Management System'),
-(6, 'short_name', 'RationManagement'),
+(1, 'name', 'SuperMarket Stock Management System'),
+(6, 'short_name', 'SuperMarketManagement System'),
 (11, 'logo', 'uploads/logo-1635816671.png'),
 (13, 'user_avatar', 'uploads/user_avatar.jpg'),
 (14, 'cover', 'uploads/cover-1635816671.png'),
@@ -318,15 +318,15 @@ INSERT INTO `system_info` (`id`, `meta_field`, `meta_value`) VALUES
 CREATE TABLE `users` (
   `id` int(50) NOT NULL,
   `firstname` varchar(250) NOT NULL,
-  `middlename` text,
+  `middlename` text DEFAULT NULL,
   `lastname` varchar(250) NOT NULL,
   `username` text NOT NULL,
   `password` text NOT NULL,
-  `avatar` text,
+  `avatar` text DEFAULT NULL,
   `last_login` datetime DEFAULT NULL,
-  `type` tinyint(1) NOT NULL DEFAULT '0',
-  `date_added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+  `type` tinyint(1) NOT NULL DEFAULT 0,
+  `date_added` datetime NOT NULL DEFAULT current_timestamp(),
+  `date_updated` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -334,8 +334,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `firstname`, `middlename`, `lastname`, `username`, `password`, `avatar`, `last_login`, `type`, `date_added`, `date_updated`) VALUES
-(1, 'Adminstrator', NULL, 'Admin', 'admin', '0192023a7bbd73250516f069df18b500', 'uploads/avatar-1.png?v=1635556826', NULL, 1, '2021-01-20 14:02:37', '2021-10-30 09:20:26'),
-(11, 'admin', NULL, 'admin', 'admin2', 'cd74fae0a3adf459f73bbf187607ccea', 'uploads/avatar-11.png?v=1675348726', NULL, 1, '2021-11-03 14:22:46', '2023-02-02 20:08:46');
+(1, 'Adminstrator', NULL, 'Admin', 'admin', 'admin', 'uploads/avatar-1.png?v=1635556826', NULL, 1, '2021-01-20 14:02:37', '2023-02-14 20:50:00'),
+(11, 'admin', NULL, 'admin', 'admin2', 'admin2', 'uploads/avatar-11.png?v=1675348726', NULL, 1, '2021-11-03 14:22:46', '2023-02-14 20:50:06');
 
 -- --------------------------------------------------------
 
@@ -347,7 +347,7 @@ CREATE TABLE `user_meta` (
   `user_id` int(30) NOT NULL,
   `meta_field` text NOT NULL,
   `meta_value` text NOT NULL,
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date_created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -411,6 +411,12 @@ ALTER TABLE `sales_list`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `stock_list`
+--
+ALTER TABLE `stock_list`
+  ADD PRIMARY KEY (`stockId`);
+
+--
 -- Indexes for table `supplier_list`
 --
 ALTER TABLE `supplier_list`
@@ -448,31 +454,37 @@ ALTER TABLE `back_order_list`
 -- AUTO_INCREMENT for table `item_list`
 --
 ALTER TABLE `item_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `purchase_order_list`
 --
 ALTER TABLE `purchase_order_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `receiving_list`
 --
 ALTER TABLE `receiving_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `return_list`
 --
 ALTER TABLE `return_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sales_list`
 --
 ALTER TABLE `sales_list`
   MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `stock_list`
+--
+ALTER TABLE `stock_list`
+  MODIFY `stockId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
